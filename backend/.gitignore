@@ -1,20 +1,21 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Virtual environments
+# Virtual environment
 venv/
+ENV/
 env/
+*.pyc
+__pycache__/
 
-# Django stuff
+# Database
 db.sqlite3
-media/
-staticfiles/
 
-# IDE and OS files
+# IDE and editor files
 .vscode/
 .idea/
-*.log
+
+# System files
 .DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar.gz
