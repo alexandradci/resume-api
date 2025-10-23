@@ -21,6 +21,7 @@ class EducationHistorySerializer(serializers.ModelSerializer):
 
 
 class ResumeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     skills = SkillSerializer(many=True, required=False)
     job_history = JobHistorySerializer(many=True, required=False)
     education_history = EducationHistorySerializer(many=True, required=False)

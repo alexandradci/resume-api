@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'resumes',
+    'resumes.apps.ResumesConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -143,5 +143,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Celery configuration (we use Redis)
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
-# Local email testing — print emails to the console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Mailtrap SMTP (for testing emails)
+EMAIL_BACKEND = 'core.custom_email_backend.CustomEmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '8828b95debeba1'  
+EMAIL_HOST_PASSWORD = '02382f80bdd6f8'  
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'alexandra@backend.local'
+
