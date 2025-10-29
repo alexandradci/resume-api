@@ -1,19 +1,27 @@
+import os
 from celery import shared_task
 from django.core.mail import send_mail
 
+print("📧 DEBUG EMAIL_HOST:", os.environ.get("EMAIL_HOST"))
+print("📧 DEBUG EMAIL_USER:", os.environ.get("EMAIL_HOST_USER"))
+
+
 @shared_task
 def send_resume_created_email(user_email, resume_name):
-    subject = "Successfully created your resume"
-    message = (
-        f"Hello,\n\n"
-        f"Your resume '{resume_name}' has been successfully created.\n\n"
-        f"We’ll style it later and notify you when it’s ready to view.\n\n"
-        f"Best regards,\n"
-        f"The MyResumeApp Team"
+    subject = "Your resume has been created!"
+    message = f"""
+Hello,
+
+Your resume '{resume_name}' has been successfully created.
+
+Best regards,
+The MyResumeApp Team
+    """
+
+    send_mail(
+        subject,
+        message,
+        "oleksandra.adamchyk@dci-student.org",  # Gmail
+        [user_email],
+        fail_silently=False,
     )
-
-    from_email = "Alexandra Adamchyk <noreply@myresumeapp.com>"
-    recipient_list = [user_email]
-
-    send_mail(subject, message, from_email, recipient_list)
-    print(f"📧 Email sent to {user_email}")

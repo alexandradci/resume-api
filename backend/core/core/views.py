@@ -1,23 +1,9 @@
-from rest_framework import generics, permissions, status
-from .models import Resume, JobHistory, Skill, EducationHistory
-from .serializers import ResumeSerializer
-from .permissions import IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
+from .models import Resume, JobHistory, Skill, EducationHistory
 
-class ResumeList(generics.ListCreateAPIView):      # list + create
-    queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
-    permission_classes = (permissions.IsAuthenticated, )
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)  # set owner automatically
-
-class ResumeDetail(generics.RetrieveUpdateDestroyAPIView):  # get one, update, delete
-    queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
 
 class ResumeReorderView(APIView):
     permission_classes = (permissions.IsAuthenticated,)

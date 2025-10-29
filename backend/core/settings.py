@@ -121,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -144,12 +144,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 # Mailtrap SMTP (for testing emails)
-EMAIL_BACKEND = 'core.custom_email_backend.CustomEmailBackend'
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '8828b95debeba1'  
-EMAIL_HOST_PASSWORD = '02382f80bdd6f8'  
-EMAIL_PORT = 2525
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'oleksandra.adamchyk@dci-student.org'  
+EMAIL_HOST_PASSWORD = 'ezrjxagngxovmcnp'  
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'alexandra@backend.local'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 

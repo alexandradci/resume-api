@@ -18,6 +18,7 @@ class Resume(models.Model):
 class Skill(models.Model):
     resume = models.ForeignKey(Resume, related_name='skills', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
     skill_level = models.PositiveIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
@@ -30,6 +31,7 @@ class JobHistory(models.Model):
     resume = models.ForeignKey(Resume, related_name='job_history', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    order = models.PositiveIntegerField(default=0)
     job_title = models.CharField(max_length=255)
     description = models.TextField()
 
@@ -40,6 +42,7 @@ class JobHistory(models.Model):
 class EducationHistory(models.Model):
     resume = models.ForeignKey(Resume, related_name='education_history', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
     qualification = models.CharField(max_length=255)
 
     def __str__(self):
