@@ -32,3 +32,44 @@ class ResumeSerializer(serializers.ModelSerializer):
             'id', 'owner', 'name', 'bio', 'address',
             'job_history', 'skills', 'education_history', 'created_at',
         )
+
+    def create(self, validated_data):
+        skills_data = validated_data.pop('skills', [])
+        job_history_data = validated_data.pop('job_history', [])
+        education_history_data = validated_data.pop('education_history', [])
+
+        resume = Resume.objects.create(**validated_data)
+
+        for skill in skills_data:
+            Skill.objects.create(resume=resume, **skill)
+        for job in job_history_data:
+            JobHistory.objects.create(resume=resume, **job)
+        for edu in education_history_data:
+            EducationHistory.objects.create(resume=resume, **edu)
+
+        return resume
+
+    def update(self, instance, validated_data):
+        skills_data = validated_data.pop('skills', [])
+        job_history_data = validated_data.pop('job_history', [])
+        education_history_data = validated_data.pop('education_history', [])
+
+        instance.name = validated_data.get('name', instance.name)
+        instance.bio = validated_data.get('bio', instance.bio)
+        instance.address = validated_data.get('address', instance.address)
+        instance.save()
+
+        # Clear and recreate nested data (simpler logic)
+        instance.skills.all().delete()
+        instance.job_history.all().delete()
+        instance.education_history.all().delete()
+
+        for skill in skills_data:
+            Skill.objects.create(resume=instance, **skill)
+        for job in job_history_data:
+            JobHistory.objects.create(resume=instance, **job)
+        for edu in education_history_data:
+            EducationHistory.objects.create(resume=instance, **edu)
+
+        return instance
+
