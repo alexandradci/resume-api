@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Resume, Skill, JobHistory, EducationHistory
-
+from django.db import transaction
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,17 +49,18 @@ class ResumeSerializer(serializers.ModelSerializer):
 
         return resume
 
-    def update(self, instance, validated_data):
-        skills_data = validated_data.pop('skills', [])
-        job_history_data = validated_data.pop('job_history', [])
-        education_history_data = validated_data.pop('education_history', [])
+def update(self, instance, validated_data):
+    skills_data = validated_data.pop('skills', [])
+    job_history_data = validated_data.pop('job_history', [])
+    education_history_data = validated_data.pop('education_history', [])
 
+    with transaction.atomic(): 
         instance.name = validated_data.get('name', instance.name)
         instance.bio = validated_data.get('bio', instance.bio)
         instance.address = validated_data.get('address', instance.address)
         instance.save()
 
-        # Clear and recreate nested data (simpler logic)
+        # Clear and recreate nested data
         instance.skills.all().delete()
         instance.job_history.all().delete()
         instance.education_history.all().delete()
@@ -71,5 +72,7 @@ class ResumeSerializer(serializers.ModelSerializer):
         for edu in education_history_data:
             EducationHistory.objects.create(resume=instance, **edu)
 
-        return instance
+    return instance
 
+
+        
