@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny
-
+from django.db import transaction
 
 
 class ResumeList(generics.ListCreateAPIView):      # list + create
@@ -59,8 +59,9 @@ class ResumeReorderView(APIView):
             return Response({"detail": "education_history is empty for this resume."}, status=400)
 
         # 4) Update all rows for each section
-        JobHistory.objects.filter(resume=resume).update(order=data["job_history"])
-        Skill.objects.filter(resume=resume).update(order=data["skills"])
-        EducationHistory.objects.filter(resume=resume).update(order=data["education_history"])
+        with transaction.atomic():
+            JobHistory.objects.filter(resume=resume).update(order=data["job_history"])
+            Skill.objects.filter(resume=resume).update(order=data["skills"])
+            EducationHistory.objects.filter(resume=resume).update(order=data["education_history"])
 
         return Response({"detail": "Reordered successfully."}, status=200)
